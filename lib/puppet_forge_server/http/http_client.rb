@@ -81,8 +81,8 @@ module PuppetForgeServer::Http
     private
 
     def open_uri(url)
-      hit_or_miss = @cache.include?(url) ? 'HIT' : 'MISS'
-      @log.info "Cache in RAM memory size: #{@cache.size}, #{hit_or_miss} for url: #{url}"
+      hit_or_miss = @cache.key?(url) ? 'HIT' : 'MISS'
+      @log.info "Cache in RAM memory size: #{@cache.count}, #{hit_or_miss} for url: #{url}"
       contents = @cache.fetch(url) do
         tmpfile = ::Timeout.timeout(10) do
           PuppetForgeServer::Logger.get.debug "Fetching data for url: #{url} from remote server"

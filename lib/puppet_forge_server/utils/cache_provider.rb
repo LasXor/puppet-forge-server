@@ -14,13 +14,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-require 'lrucache'
+require 'lru_redux'
 
 module PuppetForgeServer::Utils
   module CacheProvider
 
     opts = PuppetForgeServer::Utils::OptionParser.DEFAULT_OPTIONS
-    @@CACHE = LRUCache.new(:ttl => opts[:ram_cache_ttl], :max_size => opts[:ram_cache_size])
+    @@CACHE = LruRedux::TTL::Cache.new(opts[:ram_cache_size], opts[:ram_cache_ttl])
 
     # Method for fetching application wide cache for fetching HTTP requests
     #
@@ -34,7 +34,7 @@ module PuppetForgeServer::Utils
     # @param [int] ttl a time to live for elements
     # @param [int] size a maximum size for cache
     def configure_cache(ttl, size)
-      @@CACHE = LRUCache.new(:ttl => ttl, :max_size => size)
+      @@CACHE = LruRedux::TTL::Cache.new(size, ttl)
       PuppetForgeServer::Logger.get.info("Using RAM memory LRUCache with time to live of #{ttl}sec and max size of #{size} elements")
       nil
     end
