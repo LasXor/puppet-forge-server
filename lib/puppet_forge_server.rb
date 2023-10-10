@@ -57,7 +57,7 @@ module PuppetForgeServer
 
   module Utils
     autoload :CacheProvider, 'puppet_forge_server/utils/cache_provider'
-    autoload :FilteringInspecter, 'puppet_forge_server/utils/filtering_inspecter'
+    autoload :FilteringInspector, 'puppet_forge_server/utils/filtering_inspector'
     autoload :Archiver, 'puppet_forge_server/utils/archiver'
     autoload :OptionParser, 'puppet_forge_server/utils/option_parser'
     autoload :Buffer, 'puppet_forge_server/utils/buffer'

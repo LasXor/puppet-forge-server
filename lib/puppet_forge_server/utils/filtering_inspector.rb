@@ -15,7 +15,7 @@
 # limitations under the License.
 
 module PuppetForgeServer::Utils
-  module FilteringInspecter
+  module FilteringInspector
     def self.inspect_without(object, variables)
       filtered = object.instance_variables.reject { |n| variables.include? n }
       vars = filtered.map { |n| "#{n}=#{object.instance_variable_get(n).inspect}" }
@@ -24,7 +24,7 @@ module PuppetForgeServer::Utils
     end
 
     def inspect_without(variables)
-      PuppetForgeServer::Utils::FilteringInspecter.inspect_without(self, variables)
+      PuppetForgeServer::Utils::FilteringInspector.inspect_without(self, variables)
     end
   end
 end

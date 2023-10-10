@@ -24,11 +24,11 @@ require 'net/http/post/multipart'
 module PuppetForgeServer::Http
   class HttpClient
     include PuppetForgeServer::Utils::CacheProvider
-    include PuppetForgeServer::Utils::FilteringInspecter
+    include PuppetForgeServer::Utils::FilteringInspector
 
     def initialize(cache = nil)
       cache = cache_instance if cache.nil?
-      cache.extend(PuppetForgeServer::Utils::FilteringInspecter)
+      cache.extend(PuppetForgeServer::Utils::FilteringInspector)
       @log = PuppetForgeServer::Logger.get
       @cache = cache
       @uri_options= {
