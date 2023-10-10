@@ -12,7 +12,7 @@ describe PuppetForgeServer::Http::HttpClient do
   end
   let(:uri) { "http://localhost:#{port}/" }
   before(:each) do
-    # Staring a mock server on free port to test network fetching performence
+    # Staring a mock server on free port to test network fetching performance
     @server = TCPServer.new('localhost', port)
     Thread.report_on_exception=false
     @thr = Thread.new do
