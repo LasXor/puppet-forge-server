@@ -27,11 +27,10 @@ module PuppetForgeServer::Http
     include PuppetForgeServer::Utils::FilteringInspector
 
     def initialize(cache = nil)
-      cache = cache_instance if cache.nil?
-      cache.extend(PuppetForgeServer::Utils::FilteringInspector)
+      @cache = cache || cache_instance
+      @cache.extend(PuppetForgeServer::Utils::FilteringInspector)
       @log = PuppetForgeServer::Logger.get
-      @cache = cache
-      @uri_options= {
+      @uri_options = {
         'User-Agent' => "Puppet-Forge-Server/#{PuppetForgeServer::VERSION}",
         :allow_redirections => :safe,
       }
