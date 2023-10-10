@@ -41,7 +41,7 @@ describe PuppetForgeServer::Http::HttpClient do
   let(:instance) { described_class.new(cache) }
   describe '#download' do
     let(:load) do
-      Proc.new do
+      proc do
         # To simulate multiple fetches
         99.times { instance.download(uri) }
         instance.download(uri)
@@ -68,7 +68,7 @@ describe PuppetForgeServer::Http::HttpClient do
   end
   describe '#get' do
     let(:load) do
-      Proc.new do
+      proc do
         # To simulate multiple fetches
         99.times { instance.get(uri) }
         instance.get(uri)
