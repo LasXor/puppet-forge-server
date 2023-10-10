@@ -32,32 +32,33 @@ module PuppetForgeServer::Http
       @log = PuppetForgeServer::Logger.get
       @uri_options = {
         'User-Agent' => "Puppet-Forge-Server/#{PuppetForgeServer::VERSION}",
-        :allow_redirections => :safe,
+        :allow_redirections => :safe
       }
       # OpenURI does not work with  http_proxy=http://username:password@proxyserver:port/
       # so split the proxy_url and feed it basic authentication.
-      if ENV.has_key?('http_proxy')
-        proxy = URI.parse(ENV['http_proxy'])
-        if proxy.userinfo != nil
-          @uri_options[:proxy_http_basic_authentication] = [
-            "#{proxy.scheme}://#{proxy.host}:#{proxy.port}",
-            proxy.userinfo.split(':')[0],
-            proxy.userinfo.split(':')[1]
-          ]
-        end
-      end
+      return unless ENV.key?('http_proxy')
 
+      proxy = URI.parse(ENV['http_proxy'])
+      return if proxy.userinfo.nil?
+
+      @uri_options[:proxy_http_basic_authentication] = [
+        "#{proxy.scheme}://#{proxy.host}:#{proxy.port}",
+        proxy.userinfo.split(':')[0],
+        proxy.userinfo.split(':')[1]
+      ]
     end
 
     def post_file(url, file_hash, options = {})
-      options = { :http => {}, :headers => {}}.merge(options)
+      options = { http: {}, headers: {} }.merge(options)
 
       uri = URI.parse(url)
       http = Net::HTTP.new(uri.host, uri.port)
-      options[:http].each {|k,v| http.call(k, v) }
+      options[:http].each { |k, v| http.call(k, v) }
 
-      req = Net::HTTP::Post::Multipart.new uri.path, "file" => UploadIO.new(File.open(file_hash[:tempfile]), file_hash[:type], file_hash[:filename])
-      options[:headers].each {|k,v| req[k] = v }
+      req = Net::HTTP::Post::Multipart.new uri.path, 'file' => UploadIO.new(
+        File.open(file_hash[:tempfile]), file_hash[:type], file_hash[:filename]
+      )
+      options[:headers].each { |k, v| req[k] = v }
 
       http.request(req)
     end
