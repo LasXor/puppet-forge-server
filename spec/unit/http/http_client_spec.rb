@@ -14,6 +14,7 @@ describe PuppetForgeServer::Http::HttpClient do
   before(:each) do
     # Staring a mock server on free port to test network fetching performence
     @server = TCPServer.new('localhost', port)
+    Thread.report_on_exception=false
     @thr = Thread.new do
       loop do
         socket = @server.accept
