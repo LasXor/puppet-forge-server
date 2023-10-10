@@ -64,11 +64,11 @@ module PuppetForgeServer::Http
     end
 
     def get(url)
-      open_uri(url).read
+      fetch(url).read
     end
 
     def download(url)
-      open_uri(url)
+      fetch(url)
     end
 
     def inspect
@@ -80,16 +80,30 @@ module PuppetForgeServer::Http
 
     private
 
-    def open_uri(url)
+    def fetch(url)
       hit_or_miss = @cache.key?(url) ? 'HIT' : 'MISS'
       @log.info "Cache in RAM memory size: #{@cache.count}, #{hit_or_miss} for url: #{url}"
       contents = if @cache.key?(url)
                    @cache[url]
                  else
-                   @cache[url] = Net::HTTP.get(URI.parse(url))
+                   @cache[url] = open_url(url)
                  end
       @log.debug "Data for url: #{url} fetched, #{contents.size} bytes"
       StringIO.new(contents)
+    end
+
+    def open_url(url)
+      uri = URI.parse(url)
+      return Net::HTTP.get(uri) if @uri_options[:proxy_http_basic_authentication].nil?
+
+      Net::HTTP.new(uri,
+                    p_user: @uri_options[:proxy_http_basic_authentication][1],
+                    p_pass: @uri_options[:proxy_http_basic_authentication][2]).start do |http|
+        request = Net::HTTP::Get.new uri.request_uri
+        response = http.request request
+        puts response
+        puts response.body
+      end
     end
   end
 end
