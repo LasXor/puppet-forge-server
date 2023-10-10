@@ -24,7 +24,7 @@ module PuppetForgeServer::Utils
 
     # Method for fetching application wide cache for fetching HTTP requests
     #
-    # @return [LRUCache] a instance of cache for application
+    # @return [LruRedux] a instance of cache for application
     def cache_instance
       @@CACHE
     end
